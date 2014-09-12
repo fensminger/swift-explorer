@@ -1,27 +1,23 @@
 package org.swiftexplorer.swift.util;
 
+import com.google.gson.Gson;
 import org.scribe.builder.ServiceBuilder;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
-import org.scribe.model.Verifier;
+import org.scribe.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
-
 import org.swiftexplorer.auth.builder.api.HubicApi;
+import org.swiftexplorer.auth.builder.api.HubicBatchApi;
+import org.swiftexplorer.auth.oauth.HubicBatchOAuth20ServiceImpl;
 import org.swiftexplorer.auth.oauth.HubicOAuth20ServiceImpl;
 import org.swiftexplorer.config.Configuration;
 import org.swiftexplorer.config.auth.HasAuthenticationSettings;
 import org.swiftexplorer.swift.SwiftAccess;
 
-public final class HubicSwift {
+public final class HubicBatchSwift {
 
-    final private static Logger logger = LoggerFactory.getLogger(HubicSwift.class);
+    final private static Logger logger = LoggerFactory.getLogger(HubicBatchSwift.class);
 
-    private HubicSwift () { super () ; } ;
+    private HubicBatchSwift() { super () ; } ;
 
     private static final Gson gson  = new Gson () ;
 
@@ -33,8 +29,8 @@ public final class HubicSwift {
         String apiKey = authSettings.getClientId() ;
         String apiSecret = authSettings.getClientSecret() ;
 
-        HubicOAuth20ServiceImpl service = (HubicOAuth20ServiceImpl) new ServiceBuilder()
-                .provider(HubicApi.class).apiKey(apiKey).apiSecret(apiSecret)
+        HubicBatchOAuth20ServiceImpl service = (HubicBatchOAuth20ServiceImpl) new ServiceBuilder()
+                .provider(HubicBatchApi.class).apiKey(apiKey).apiSecret(apiSecret)
                         //.scope("account.r,links.rw,usage.r,credentials.r").callback(HubicApi.CALLBACK_URL)
                 .scope(scope).callback(HubicApi.CALLBACK_URL)
                 .build();
@@ -55,8 +51,8 @@ public final class HubicSwift {
         String apiKey = authSettings.getClientId();
         String apiSecret = authSettings.getClientSecret();
 
-        HubicOAuth20ServiceImpl service = (HubicOAuth20ServiceImpl) new ServiceBuilder()
-                .provider(HubicApi.class).apiKey(apiKey).apiSecret(apiSecret)
+        HubicBatchOAuth20ServiceImpl service = (HubicBatchOAuth20ServiceImpl) new ServiceBuilder()
+                .provider(HubicBatchApi.class).apiKey(apiKey).apiSecret(apiSecret)
                         //.scope("account.r,links.rw,usage.r,credentials.r")
                 .scope(scope)
                 .callback(HubicApi.CALLBACK_URL).build();
@@ -66,7 +62,7 @@ public final class HubicSwift {
     }
 
 
-    private static SwiftAccess getSwiftAccess (HubicOAuth20ServiceImpl service, Token accessToken)
+    private static SwiftAccess getSwiftAccess (HubicBatchOAuth20ServiceImpl service, Token accessToken)
     {
         String urlCredential = HubicApi.CREDENTIALS_URL;
 

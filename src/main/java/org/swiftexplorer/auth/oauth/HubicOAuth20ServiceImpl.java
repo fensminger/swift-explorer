@@ -46,8 +46,8 @@ public class HubicOAuth20ServiceImpl implements OAuthService {
 	
 	final private Logger logger = LoggerFactory.getLogger(HubicOAuth20ServiceImpl.class);
 
-	private final HubicApi api;
-	private final OAuthConfig config;
+	protected final HubicApi api;
+	protected final OAuthConfig config;
 	
 	
 	public HubicOAuth20ServiceImpl(HubicApi api, OAuthConfig config) {
