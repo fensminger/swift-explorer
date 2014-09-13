@@ -83,7 +83,11 @@ public class AuthHttpServer implements SynchronousDataProvider<Map<String, Strin
 			server.setExecutor(httpThreadPool);
 			server.start();
 		}
-		return blockingQueue.poll(10 * 60, TimeUnit.SECONDS);
+        Map<String, String> res = blockingQueue.poll(10000 * 60, TimeUnit.SECONDS);
+        if (res.size()==0) {
+            res = blockingQueue.poll(10000 * 60, TimeUnit.SECONDS);
+        }
+        return res;
 	}
 	
 	

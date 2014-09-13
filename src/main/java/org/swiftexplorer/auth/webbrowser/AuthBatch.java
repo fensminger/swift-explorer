@@ -214,6 +214,11 @@ public class AuthBatch {
                     HttpGet httpGetRedirect = new HttpGet(urlRedirectLocal);
                     HttpResponse responseRedirect = httpClient.execute(httpGetRedirect);
                     logger.info("statusLine redirect: " + responseRedirect.getStatusLine());
+                    String bodyRedirectResponse = "";
+                    try (InputStreamReader content = new InputStreamReader(responseRedirect.getEntity().getContent())) {
+                        bodyRedirectResponse = CharStreams.toString(content);
+                    }
+                    logger.info("Response body redirect : " + bodyRedirectResponse);
                 }
 
             } catch (IOException e) {
