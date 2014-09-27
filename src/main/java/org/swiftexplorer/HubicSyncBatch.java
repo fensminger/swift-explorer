@@ -178,11 +178,13 @@ public class HubicSyncBatch {
 //        }
 
         Collection<StoredObject> res = getAllContainedStoredObject(mainContainer, null);
+        long nbElt = 0l;
         for(StoredObject storedObject : res) {
                 logger.info("Content type:   "+storedObject.getContentType() + " -> " + storedObject.getName());
+            nbElt++;
         }
 
-        System.out.println("Nombre de contenaires : "+callBackInfo.containers.size());
+        System.out.println("Nombre d(éléments de default : "+nbElt);
     }
 
     private static Collection<StoredObject> getAllContainedStoredObject (Container container, Directory parent)
