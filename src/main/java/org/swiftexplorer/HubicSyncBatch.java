@@ -177,14 +177,29 @@ public class HubicSyncBatch {
 //            }
 //        }
 
-        Collection<StoredObject> res = getAllContainedStoredObject(mainContainer, null);
+        final int pageSize = 9999;
         long nbElt = 0l;
-        for(StoredObject storedObject : res) {
-                logger.info("Content type:   "+storedObject.getContentType() + " -> " + storedObject.getName());
-            nbElt++;
+        int recordsToGo = mainContainer.getCount();
+        String marker = null;
+        while (recordsToGo > 0) {
+            logger.info("Début de page : " + marker);
+            Collection<DirectoryOrObject> res = mainContainer.listDirectory(null, null, marker, pageSize); // getAllContainedStoredObject(mainContainer, null);
+            boolean first = true;
+            for (DirectoryOrObject storedObject : res) {
+                if (first) {
+                    logger.info("Content type:   " + storedObject.isDirectory() + " -> " + storedObject.getName());
+                    first = false;
+                }
+                if (storedObject.isDirectory()) {
+                    logger.info("Directory : " + storedObject.getAsObject().getName());
+                }
+                nbElt++;
+                marker = storedObject.getName();
+            }
+            recordsToGo -= res.size() == 0 ? recordsToGo : (res.size() < pageSize ? res.size() : pageSize);
         }
 
-        System.out.println("Nombre d(éléments de default : "+nbElt);
+        System.out.println("Nombre d'éléments de default : "+nbElt);
     }
 
     private static Collection<StoredObject> getAllContainedStoredObject (Container container, Directory parent)

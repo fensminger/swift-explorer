@@ -21,21 +21,35 @@ import org.swiftexplorer.swift.client.impl.HubicAccessProvider;
 
 public class AccountConfigFactory {
 	private AccountConfigFactory () {} ;
-	
-	
-	public static AccountConfig getHubicAccountConfig (final SwiftAccess sa)
-	{
-	    AccountConfig accConf = new AccountConfig () ;
-	    accConf.setDisableSslValidation(false);
-	    accConf.setAuthenticationMethod(AuthenticationMethod.EXTERNAL);
-	    accConf.setMock(false);
-	    accConf.setAllowReauthenticate(true);
-	    accConf.setAllowCaching(true) ;
-	    accConf.setAccessProvider (getHubicAccessProvider (sa)) ;
-	    return accConf ;
-	}
-	
-	
+
+
+    public static AccountConfig getHubicAccountConfig (final SwiftAccess sa)
+    {
+        AccountConfig accConf = new AccountConfig () ;
+        accConf.setDisableSslValidation(false);
+        accConf.setAuthenticationMethod(AuthenticationMethod.EXTERNAL);
+        accConf.setMock(false);
+        accConf.setAllowReauthenticate(true);
+        accConf.setAllowCaching(true) ;
+        accConf.setAccessProvider (getHubicAccessProvider (sa)) ;
+        return accConf ;
+    }
+
+    public static AccountConfig getHubicAccountConfigNoDelimiter (final SwiftAccess sa)
+    {
+        AccountConfig accConf = new AccountConfig () ;
+        accConf.setDisableSslValidation(false);
+        accConf.setAuthenticationMethod(AuthenticationMethod.EXTERNAL);
+        accConf.setMock(false);
+        accConf.setAllowReauthenticate(true);
+        accConf.setAllowCaching(true) ;
+        accConf.setDelimiter(null);
+        accConf.setAccessProvider (getHubicAccessProvider (sa)) ;
+        return accConf ;
+    }
+
+
+
     private static AuthenticationMethod.AccessProvider getHubicAccessProvider (final SwiftAccess sa)
     {
     	return new HubicAccessProvider (sa) ;

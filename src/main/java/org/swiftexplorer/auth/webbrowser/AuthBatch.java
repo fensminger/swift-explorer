@@ -43,10 +43,7 @@ import org.swiftexplorer.auth.server.SynchronousDataProvider;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AuthBatch {
 
@@ -146,7 +143,9 @@ public class AuthBatch {
                 }
 
                 Document doc = Jsoup.parse(body);
-                Map<String, String> params = anaParamsForFirstGet(doc, "fensminger@gmail.com", "GD7RG9au");
+                Properties properties = new Properties();
+                properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("hubiccon.properties"));
+                Map<String, String> params = anaParamsForFirstGet(doc, properties.getProperty("login"), properties.getProperty("pwd"));
                 String action = loadAction(doc);
 
                 logger.info("Accès à l'URL : " + url);
