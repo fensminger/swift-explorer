@@ -57,6 +57,16 @@ public class HubicBatchOAuth20ServiceImpl extends HubicOAuth20ServiceImpl {
         final String authorizationUrl = getAuthorizationUrl(null);
         AuthBatch authBatch = AuthBatch.authenticate (httpServer, authorizationUrl) ;
 
+		new Thread(() -> {
+			try {
+				// Pour être certain que le serveur web est bien démarré car le NAS est très lent.
+				Thread.currentThread().sleep(5000L);
+				authBatch.startHubic(authorizationUrl);
+			} catch (InterruptedException e) {
+				logger.error("Authentification interrompue : " + e.getMessage());
+			}
+		}).start();
+
 		Map<String, String> params = null ;
 		try 
 		{

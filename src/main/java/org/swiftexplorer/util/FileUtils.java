@@ -71,31 +71,41 @@ public class FileUtils {
 	
 	public static String readAllAndgetMD5 (InputStream in) throws IOException
 	{
-		com.google.common.hash.HashingInputStream his = null ;
-		try
-		{
-			his = new com.google.common.hash.HashingInputStream (Hashing.md5(), in) ;
-			
-			final int bufferSize = 2097152 ;
-			final ReadableByteChannel inputChannel = Channels.newChannel(his);
-			final ByteBuffer buffer = ByteBuffer.allocateDirect(bufferSize);
-			while (inputChannel.read(buffer) != -1) {
-				buffer.clear();
-			}
-			/*
-			byte[] bytesBuffer = new byte[bufferSize] ;
-			int r = his.read(bytesBuffer, 0, bufferSize) ;
-			while (r != -1)
-				r = his.read(bytesBuffer) ;
-			*/
-			HashCode hc = his.hash() ;
-			return (hc != null) ? (hc.toString()) : (null) ;
-		}
-		finally
-		{
-			if (his != null)
-				his.close() ;
-		}
+        FileInputStream fis = new FileInputStream(new File("foo"));
+        try {
+            String md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(fis);
+            return md5;
+        } finally {
+            if (fis !=null) {
+                fis.close();
+            }
+        }
+
+//		com.google.common.hash.HashingInputStream his = null ;
+//		try
+//		{
+//			his = new com.google.common.hash.HashingInputStream (Hashing.md5(), in) ;
+//
+//			final int bufferSize = 2097152 ;
+//			final ReadableByteChannel inputChannel = Channels.newChannel(his);
+//			final ByteBuffer buffer = ByteBuffer.allocateDirect(bufferSize);
+//			while (inputChannel.read(buffer) != -1) {
+//				buffer.clear();
+//			}
+//			/*
+//			byte[] bytesBuffer = new byte[bufferSize] ;
+//			int r = his.read(bytesBuffer, 0, bufferSize) ;
+//			while (r != -1)
+//				r = his.read(bytesBuffer) ;
+//			*/
+//			HashCode hc = his.hash() ;
+//			return (hc != null) ? (hc.toString()) : (null) ;
+//		}
+//		finally
+//		{
+//			if (his != null)
+//				his.close() ;
+//		}
 	}
 	
 	
