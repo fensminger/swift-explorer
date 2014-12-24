@@ -23,9 +23,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
@@ -41,8 +44,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftexplorer.auth.server.SynchronousDataProvider;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class AuthBatch {
@@ -134,8 +140,24 @@ public class AuthBatch {
             httpClientContext.setCookieStore(cookieStore);
             cookieStore.addCookie(new BasicClientCookie("_pk_id.21.7fb5", "b2b408d941f96548.1386016715.2.1395093565.1386016715."));
 
-            CloseableHttpClient httpClient = HttpClients.custom()
-                    //.setKeepAliveStrategy(myStrategy)
+//            CloseableHttpClient httpClient = HttpClients.custom()
+//                    //.setKeepAliveStrategy(myStrategy)
+//                    .build();
+
+//            SSLContext context = SSLContext.getInstance("TLSv1");
+            SSLContext sslcontext = SSLContexts.custom()
+//                    .loadKeyMaterial(keyStore, "password".toCharArray())
+                            //.loadTrustMaterial(trustStore, new TrustSelfSignedStrategy())
+                    .build();
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                    sslcontext,
+                    new String[] { "TLSv1" },
+                    null,
+                    SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            CloseableHttpClient httpClient = HttpClientBuilder
+                    .create()
+                    .setSslcontext(SSLContexts.custom().useProtocol("TLSv1").build())
+                    .setSSLSocketFactory(sslsf)
                     .build();
 
             HttpGet httpGet = new HttpGet(url);
@@ -263,6 +285,11 @@ public class AuthBatch {
         } catch (IOException e) {
             logger.error("Impossible de se connecter à hubic. " + e.getMessage(), e);
             return false;
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Impossible de se connecter à hubic. " + e.getMessage(), e);
+            return false;
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
         }
         return true;
     }
